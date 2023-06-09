@@ -1,6 +1,8 @@
-import  { useState } from "react";
+import { useState } from "react";
 import { TextField, Button, Box } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
+import SearchIcon from "@mui/icons-material/Search";
+import RestartAltIcon from "@mui/icons-material/RestartAlt";
 
 const SearchBox = ({ onSearch }) => {
   const [searchText, setSearchText] = useState("");
@@ -41,10 +43,18 @@ const SearchBox = ({ onSearch }) => {
         gap="20px"
         width="100%"
       >
-        <Button variant="contained" onClick={handleSearch}>
+        <Button
+          variant="contained"
+          onClick={handleSearch}
+          startIcon={<SearchIcon />}
+        >
           Search
         </Button>
-        <Button variant="outlined" onClick={handleReset}>
+        <Button
+          variant="outlined"
+          onClick={handleReset}
+          startIcon={<RestartAltIcon />}
+        >
           Reset
         </Button>
         <TextField
