@@ -18,6 +18,8 @@ import SearchBox from "./searchBox";
 import CircleIcon from "@mui/icons-material/Circle";
 import FastfoodIcon from "@mui/icons-material/Fastfood";
 import CircularProgress from "@mui/material/CircularProgress";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
 import api from "./api";
 
@@ -45,9 +47,26 @@ function ResultNotFound() {
   );
 }
 
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 export default function Album() {
   const [results, setResults] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
+  const [snackbarOpen, setSnackbarOpen] = React.useState(false);
+
+  const handleSnackbarClick = () => {
+    setSnackbarOpen(true);
+  };
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setSnackbarOpen(false);
+  };
 
   const onSearch = (searchParams, reset) => {
     console.log("searchText: ", searchParams, loading);
@@ -70,6 +89,9 @@ export default function Album() {
           console.log(error);
         });
     }
+    if (filteredObject.q.trim() === "" && !reset) {
+      handleSnackbarClick();
+    }
 
     if (!reset) {
       setResults([]);
@@ -77,7 +99,9 @@ export default function Album() {
   };
 
   React.useEffect(() => {
-    setLoading((prev) => !prev);
+    if (results.length > 0) {
+      setLoading((prev) => !prev);
+    }
   }, [results]);
 
   return (
@@ -196,10 +220,10 @@ export default function Album() {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                mt: 4
+                mt: 4,
               }}
             >
-              <CircularProgress size='6rem' />
+              <CircularProgress size="6rem" />
             </Box>
           )}
         </Container>
@@ -220,6 +244,21 @@ export default function Album() {
         <Copyright />
       </Box>
       {/* End footer */}
+      <Stack spacing={2} sx={{ width: "100%" }}>
+        <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={6000}
+          onClose={handleSnackbarClose}
+        >
+          <Alert
+            onClose={handleSnackbarClose}
+            severity="error"
+            sx={{ width: "100%" }}
+          >
+            Please enter a food name!!
+          </Alert>
+        </Snackbar>
+      </Stack>
     </div>
   );
 }
