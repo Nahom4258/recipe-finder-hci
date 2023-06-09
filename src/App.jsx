@@ -1,9 +1,6 @@
 import * as React from "react";
 import AppBar from "@mui/material/AppBar";
-import Button from "@mui/material/Button";
-import CameraIcon from "@mui/icons-material/PhotoCamera";
 import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -81,9 +78,9 @@ export default function Album() {
           params: filteredObject,
         })
         .then((result) => {
-          setLoading(true);
           console.log("res: ", result.data.hits);
           setResults(result.data.hits);
+          setLoading(true);
         })
         .catch((error) => {
           console.log(error);
@@ -99,9 +96,7 @@ export default function Album() {
   };
 
   React.useEffect(() => {
-    if (results.length > 0) {
       setLoading((prev) => !prev);
-    }
   }, [results]);
 
   return (
